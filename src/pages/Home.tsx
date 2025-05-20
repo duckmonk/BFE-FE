@@ -37,9 +37,9 @@ const Home: React.FC = () => {
     navigate('/inquiry');
   };
 
-  if (isLoggedIn) {
-    return <LandingPage />;
-  }
+  // if (isLoggedIn) {
+  //   return <LandingPage />;
+  // }
 
   return (
     <Box sx={{ bgcolor: '#fafafa', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>

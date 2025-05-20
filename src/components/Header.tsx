@@ -1,22 +1,35 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { userApi } from '../services/api';
-import { clearUserInfo, getUserInfo } from '../utils/user';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Typography, Button, Box, IconButton, Menu, MenuItem, Avatar } from '@mui/material';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const user = getUserInfo();
+  const location = useLocation();
+  const { user, logout } = useAuth();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleLogout = async () => {
-    try {
-      await userApi.logout();
-    } catch (e) {
-      // 可以根据需要处理错误
-    }
-    clearUserInfo();
-    navigate('/');
-    window.location.reload();
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    handleClose();
+    logout();
+    navigate('/login');
+  };
+
+  const handleProfile = () => {
+    handleClose();
+    navigate('/profile');
+  };
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
   };
 
   return (
@@ -37,62 +50,102 @@ const Header: React.FC = () => {
         >
           BREAK FREE EARTH LLC
         </Typography>
-        <Box>
-          {!user && (
-            <>
-              <Button 
-                component={RouterLink} 
-                to="/about"
-                sx={{ color: '#000', textTransform: 'none' }}
-              >
-                Service Details
-              </Button>
-              <Button 
-                component={RouterLink} 
-                to="/sample-case"
-                sx={{ color: '#000', textTransform: 'none' }}
-              >
-                Sample Case
-              </Button>
-            </>
-          )}
-          {/* <Button color="inherit" component={RouterLink} to="/review">
-            Review
-          </Button> */}
-          {user ? (
-            <>
-              <Typography sx={{ color: '#000', display: 'inline', ml: 2, mr: 1 }}>
-                {user.userName}
-              </Typography>
-              <Button
-                onClick={handleLogout}
-                sx={{
-                  bgcolor: '#000',
-                  color: '#fff',
-                  textTransform: 'none',
-                  ml: 1,
-                  '&:hover': { bgcolor: '#222' }
-                }}
-              >
-                Logout
-              </Button>
-            </>
-          ) : (
-            <Button
-              component={RouterLink}
-              to="/login"
-              sx={{
-                bgcolor: '#000',
-                color: '#fff',
-                textTransform: 'none',
-                ml: 2,
-                '&:hover': { bgcolor: '#222' }
-              }}
+        {user ? (
+          <>
+            {user.userType === 'client' && (
+              <Box sx={{ display: 'flex', gap: 2, mr: 2 }}>
+                <Button 
+                  color="inherit" 
+                  onClick={() => navigate('/')}
+                  sx={{ 
+                    fontWeight: isActive('/') ? 700 : 400,
+                    color: '#000'
+                  }}
+                >
+                  Home
+                </Button>
+                <Button 
+                  color="inherit" 
+                  onClick={() => navigate('/landing')}
+                  sx={{ 
+                    fontWeight: isActive('/landing') ? 700 : 400,
+                    color: '#000'
+                  }}
+                >
+                  Landing Page
+                </Button>
+              </Box>
+            )}
+            {user.userType === 'marketing_manager' && (
+              <Box sx={{ display: 'flex', gap: 2, mr: 2 }}>
+                <Button 
+                  color="inherit" 
+                  onClick={() => navigate('/inquiry-dashboard')}
+                  sx={{ 
+                    fontWeight: isActive('/inquiry-dashboard') ? 700 : 400,
+                    color: '#000'
+                  }}
+                >
+                  Inquiry Dashboard
+                </Button>
+                <Button 
+                  color="inherit" 
+                  onClick={() => navigate('/case-detail-dashboard')}
+                  sx={{ 
+                    fontWeight: isActive('/case-detail-dashboard') ? 700 : 400,
+                    color: '#000'
+                  }}
+                >
+                  Case Detail Dashboard
+                </Button>
+              </Box>
+            )}
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
             >
-              Login
-            </Button>
-          )}
-        </Box>
+              <Avatar sx={{ width: 32, height: 32, bgcolor: '#1976d2' }}>
+                {user.userName?.[0]?.toUpperCase()}
+              </Avatar>
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleProfile}>Profile</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </>
+        ) : (
+          <Button 
+            variant="contained" 
+            onClick={() => navigate('/login')}
+            sx={{ 
+              bgcolor: '#000',
+              color: '#fff',
+              '&:hover': {
+                bgcolor: '#333'
+              }
+            }}
+          >
+            Login
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );

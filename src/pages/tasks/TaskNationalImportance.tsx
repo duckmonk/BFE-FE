@@ -98,7 +98,7 @@ const TaskNationalImportance = forwardRef(({ clientCaseId }: { clientCaseId: num
         rows={4}
         size="small"
         sx={{ mb: 2 }}
-        value={formData.endeavorFeedback || ''}
+        value={formData.prong1NiOverall || ''}
         onChange={handleTextFieldChange}
       />
       <Button
@@ -115,10 +115,20 @@ const TaskNationalImportance = forwardRef(({ clientCaseId }: { clientCaseId: num
         variant="contained"
         color="primary"
         fullWidth
-        onClick={() => setFormData(prev => ({ ...prev, prong1NiConfirmation: 'approved' }))}
+        onClick={async () => {
+          try {
+            const data = { ...formData, prong1NiConfirmation: 'YES' };
+            await infoCollApi.submitNationalImportance(data);
+            setFormData(prev => ({ ...prev, prong1NiConfirmation: 'YES' }));
+            setSnackbar({ open: true, message: '确认成功', severity: 'success' });
+          } catch (e: any) {
+            setSnackbar({ open: true, message: e?.message || '确认失败', severity: 'error' });
+          }
+        }}
+        disabled={formData.prong1NiConfirmation === 'YES'}
         sx={{ mb: 3 }}
       >
-        Approve & Continue
+        {formData.prong1NiConfirmation === 'YES' ? 'Approved' : 'Approve & Continue'}
       </Button>
 
       <Snackbar

@@ -28,7 +28,7 @@ const TaskEndeavorSubmission = forwardRef(({ clientCaseId }: { clientCaseId: num
   // 复选框处理
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
-    setFormData(prev => ({ ...prev, [name]: checked ? 'I approve this final version' : 'I request further changes' }));
+    setFormData(prev => ({ ...prev, [name]: checked ? 'YES' : 'NO' }));
   };
 
   // 关闭snackbar
@@ -122,21 +122,21 @@ const TaskEndeavorSubmission = forwardRef(({ clientCaseId }: { clientCaseId: num
         control={
           <Checkbox
             name="endeavorConfirm"
-            checked={formData.endeavorConfirm === 'I approve this final version'}
+            checked={formData.endeavorConfirm === 'YES'}
             onChange={handleCheckboxChange}
             required
           />
         }
         label="I approve this final version"
       />
-      {formData.endeavorConfirm === 'I request further changes' && (
+      {formData.endeavorConfirm === 'NO' && (
         <Typography variant="body2" color="text.secondary" sx={{ ml: 4, mb: 2 }}>
           (Uncheck: I request further changes)
         </Typography>
       )}
 
       {/* Final Version of Endeavor - 仅在确认后显示 */}
-      {formData.endeavorConfirm === 'I approve this final version' && (
+      {formData.endeavorConfirm === 'YES' && (
         <>
           <Typography variant="subtitle1" fontWeight={600} sx={{ mt: 3, mb: 1 }}>Final Version of Endeavor</Typography>
           <TextField
