@@ -51,22 +51,22 @@ export const inquiryApi = {
     return api.post(`${API_PATHS.INQUIRY}/save`, data);
   },
   getInquiries: (params?: { dateStart?: number; dateEnd?: number }) => {
-    return api.get('/inquiry/page', { params });
+    return api.get(`${API_PATHS.INQUIRY}/page`, { params });
   }
 };
 
 export const clientCaseApi = {
   getCurrentCase: async (): Promise<any> => {
-    return api.get(`/client-case/current`);
+    return api.get(`${API_PATHS.CLIENT_CASE}/current`);
   },
   getCaseByUserId: async (userId: number): Promise<any> => {
-    return api.get(`/client-case/user/${userId}`);
+    return api.get(`${API_PATHS.CLIENT_CASE}/user/${userId}`);
   },
   getCaseById: async (clientCaseId: number): Promise<any> => {
-    return api.get(`/client-case/${clientCaseId}`);
+    return api.get(`${API_PATHS.CLIENT_CASE}/${clientCaseId}`);
   },
   getCases: async (params?: { current?: number; size?: number; dateStart?: number; dateEnd?: number }): Promise<any> => {
-    return api.get('/client-case/page', { params });
+    return api.get(`${API_PATHS.CLIENT_CASE}/page`, { params });
   }
 };
 
@@ -96,53 +96,16 @@ export const infoCollApi = {
     return api.get(`${API_PATHS.INFO_COLL}/resume/case/${clientCaseId}`);
   },
   getAcademicHistory: (clientCaseId: number) => {
-    return api.get(`/infoColl/academicHistory/${clientCaseId}`);
+    return api.get(`${API_PATHS.INFO_COLL}/academic-history/case/${clientCaseId}`);
   },
   submitAcademicHistory: (data: any) => {
-    return api.post('/infoColl/academicHistory/upsert', data);
+    return api.post(`${API_PATHS.INFO_COLL}/academic-history/upsert`, data);
   },
   getEmploymentHistory: async (clientCaseId: number): Promise<any> => {
-    return api.get(`/infoColl/employment-history/case/${clientCaseId}`);
+    return api.get(`${API_PATHS.INFO_COLL}/employment-history/case/${clientCaseId}`);
   },
   submitEmploymentHistory: async (data: any): Promise<any> => {
-    return api.post(`/infoColl/employment-history/upsert`, data);
-  },
-  getEndeavorSubmission: async (clientCaseId: number): Promise<any> => {
-    return api.get(`/task/endeavor-submission/case/${clientCaseId}`);
-  },
-  submitEndeavorSubmission: async (data: any): Promise<any> => {
-    return api.post(`/task/endeavor-submission/upsert`, data);
-  },
-  getNationalImportance: async (clientCaseId: number): Promise<any> => {
-    return api.get(`/task/national-importance/case/${clientCaseId}`);
-  },
-  submitNationalImportance: async (data: any): Promise<any> => {
-    return api.post(`/task/national-importance/upsert`, data);
-  },
-  getNiwPetition: async (clientCaseId: number): Promise<any> => {
-    return api.get(`${API_PATHS.INFO_COLL}/niw-petition/case/${clientCaseId}`);
-  },
-  submitNiwPetition: async (data: {
-    id?: number;
-    clientCaseId: number;
-    userPath: string;
-    contributions: Array<{
-      id?: number;
-      contributionTitle: string;
-      fundingReceived: string;
-      impact: string;
-      industryAdoption: string;
-      publication: string;
-      fundings?: Array<{
-        id?: number;
-        fundingCategory: string;
-        fundingLinks: string;
-        fundingAttachments: string;
-        fundingRemarks: string;
-      }>;
-    }>;
-  }): Promise<any> => {
-    return api.post(`${API_PATHS.INFO_COLL}/niw-petition/upsert`, data);
+    return api.post(`${API_PATHS.INFO_COLL}/employment-history/upsert`, data);
   },
   getRecommender: async (clientCaseId: number): Promise<any> => {
     return api.get(`${API_PATHS.INFO_COLL}/recommender/case/${clientCaseId}`);
@@ -173,7 +136,35 @@ export const infoCollApi = {
       relationshipStory: string;
     }>;
   }): Promise<any> => {
-    return api.post(`${API_PATHS.INFO_COLL}/recommender/submit`, data);
+    return api.post(`${API_PATHS.INFO_COLL}/recommender/upsert`, data);
+  },
+  getRecommenderNames: (clientCaseId: number) => {
+    return api.get(`${API_PATHS.INFO_COLL}/recommender/names/${clientCaseId}`);
+  },
+  getNiwPetition: async (clientCaseId: number): Promise<any> => {
+    return api.get(`${API_PATHS.INFO_COLL}/niw-petition/case/${clientCaseId}`);
+  },
+  submitNiwPetition: async (data: {
+    id?: number;
+    clientCaseId: number;
+    userPath: string;
+    contributions: Array<{
+      id?: number;
+      contributionTitle: string;
+      fundingReceived: string;
+      impact: string;
+      industryAdoption: string;
+      publication: string;
+      fundings?: Array<{
+        id?: number;
+        fundingCategory: string;
+        fundingLinks: string;
+        fundingAttachments: string;
+        fundingRemarks: string;
+      }>;
+    }>;
+  }): Promise<any> => {
+    return api.post(`${API_PATHS.INFO_COLL}/niw-petition/upsert`, data);
   },
   getContributions: async (clientCaseId: number): Promise<any> => {
     return api.get(`${API_PATHS.INFO_COLL}/niw-petition/contributions/${clientCaseId}`);
@@ -201,6 +192,22 @@ export const infoCollApi = {
   }): Promise<any> => {
     return api.post(`${API_PATHS.INFO_COLL}/final-questionnaire/upsert`, data);
   },
+};
+
+
+export const taskApi = {
+  getEndeavorSubmission: async (clientCaseId: number): Promise<any> => {
+    return api.get(`${API_PATHS.TASK}/endeavor-submission/case/${clientCaseId}`);
+  },
+  submitEndeavorSubmission: async (data: any): Promise<any> => {
+    return api.post(`${API_PATHS.TASK}/endeavor-submission/upsert`, data);
+  },
+  getNationalImportance: async (clientCaseId: number): Promise<any> => {
+    return api.get(`${API_PATHS.TASK}/national-importance/case/${clientCaseId}`);
+  },
+  submitNationalImportance: async (data: any): Promise<any> => {
+    return api.post(`${API_PATHS.TASK}/national-importance/upsert`, data);
+  },
   getFuturePlan: (clientCaseId: number) => {
     return api.get(`${API_PATHS.TASK}/future-plan/case/${clientCaseId}`);
   },
@@ -216,11 +223,8 @@ export const infoCollApi = {
   }) => {
     return api.post(`${API_PATHS.TASK}/future-plan/upsert`, data);
   },
-  getRecommenderNames: (clientCaseId: number) => {
-    return api.get(`${API_PATHS.INFO_COLL}/recommender/names/${clientCaseId}`);
-  },
   getSubstantialMerits: (clientCaseId: number) => {
-    return api.get(`/task/substantial-merits/case/${clientCaseId}`);
+    return api.get(`${API_PATHS.TASK}/substantial-merits/case/${clientCaseId}`);
   },
   submitSubstantialMerits: (data: {
     id?: number;
@@ -229,10 +233,10 @@ export const infoCollApi = {
     overall: string;
     confirm: string;
   }) => {
-    return api.post(`/task/substantial-merits/submit`, data);
+    return api.post(`${API_PATHS.TASK}/substantial-merits/upsert`, data);
   },
   getRecommendationLetters: (clientCaseId: number) => {
-    return api.get(`/task/recommendation-letter/case/${clientCaseId}`);
+    return api.get(`${API_PATHS.TASK}/recommendation-letter/case/${clientCaseId}`);
   },
   submitRecommendationLetters: (data: Array<{
     id?: number;
@@ -244,10 +248,10 @@ export const infoCollApi = {
     rlConfirm: string;
     rlSignedLetter: string;
   }>) => {
-    return api.post(`/task/recommendation-letter/submit`, data);
+    return api.post(`${API_PATHS.TASK}/recommendation-letter/upsert`, data);
   },
   getWellPositioned: (clientCaseId: number) => {
-    return api.get(`/task/well-positioned/case/${clientCaseId}`);
+    return api.get(`${API_PATHS.TASK}/well-positioned/case/${clientCaseId}`);
   },
   submitWellPositioned: (data: {
     id?: number;
@@ -256,10 +260,10 @@ export const infoCollApi = {
     overall: string;
     confirm: string;
   }) => {
-    return api.post(`/task/well-positioned/submit`, data);
+    return api.post(`${API_PATHS.TASK}/well-positioned/submit`, data);
   },
   getBalancingFactors: (clientCaseId: number) => {
-    return api.get(`/task/balancing-factors/case/${clientCaseId}`);
+    return api.get(`${API_PATHS.TASK}/balancing-factors/case/${clientCaseId}`);
   },
   submitBalancingFactors: (data: {
     id?: number;
@@ -268,7 +272,7 @@ export const infoCollApi = {
     overall: string;
     confirm: string;
   }) => {
-    return api.post(`/task/balancing-factors/submit`, data);
+    return api.post(`${API_PATHS.TASK}/balancing-factors/submit`, data);
   }
 };
 

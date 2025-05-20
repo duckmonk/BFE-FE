@@ -19,7 +19,7 @@ const cases = [
   }
 ];
 
-const SampleCases: React.FC = () => {
+const Service: React.FC = () => {
   return (
     <Box sx={{ bgcolor: '#fafafa', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Container maxWidth="lg" sx={{ pt: 6, pb: 6, flex: 1 }}>
@@ -50,4 +50,4 @@ const SampleCases: React.FC = () => {
   );
 };
 
-export default SampleCases; 
+export default Service; 

@@ -33,118 +33,132 @@ const Header: React.FC = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ bgcolor: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+    <AppBar position="static" color="default" elevation={0}>
       <Toolbar>
         <Typography
-          variant="subtitle1"
+          variant="h6"
           component={RouterLink}
           to="/"
-          sx={{ 
-            flexGrow: 1, 
-            color: '#000', 
-            textDecoration: 'none', 
-            cursor: 'pointer',
-            fontSize: '1.2rem',
+          sx={{
+            flexGrow: 1,
+            textDecoration: 'none',
+            color: 'inherit',
             fontWeight: 600
           }}
         >
-          BREAK FREE EARTH LLC
+          Break Free Earth
         </Typography>
+
         {user ? (
           <>
-            {user.userType === 'client' && (
-              <Box sx={{ display: 'flex', gap: 2, mr: 2 }}>
-                <Button 
-                  color="inherit" 
-                  onClick={() => navigate('/')}
-                  sx={{ 
-                    fontWeight: isActive('/') ? 700 : 400,
-                    color: '#000'
-                  }}
-                >
-                  Home
-                </Button>
-                <Button 
-                  color="inherit" 
-                  onClick={() => navigate('/landing')}
-                  sx={{ 
-                    fontWeight: isActive('/landing') ? 700 : 400,
-                    color: '#000'
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              {user.userType === 'client' ? (
+                <Button
+                  component={RouterLink}
+                  to="/landing"
+                  color="inherit"
+                  sx={{
+                    fontWeight: isActive('/landing') ? 600 : 400,
+                    '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
                   }}
                 >
                   Landing Page
                 </Button>
-              </Box>
-            )}
-            {user.userType === 'marketing_manager' && (
-              <Box sx={{ display: 'flex', gap: 2, mr: 2 }}>
-                <Button 
-                  color="inherit" 
-                  onClick={() => navigate('/inquiry-dashboard')}
-                  sx={{ 
-                    fontWeight: isActive('/inquiry-dashboard') ? 700 : 400,
-                    color: '#000'
-                  }}
-                >
-                  Inquiry Dashboard
-                </Button>
-                <Button 
-                  color="inherit" 
-                  onClick={() => navigate('/case-detail-dashboard')}
-                  sx={{ 
-                    fontWeight: isActive('/case-detail-dashboard') ? 700 : 400,
-                    color: '#000'
-                  }}
-                >
-                  Case Detail Dashboard
-                </Button>
-              </Box>
-            )}
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <Avatar sx={{ width: 32, height: 32, bgcolor: '#1976d2' }}>
-                {user.userName?.[0]?.toUpperCase()}
-              </Avatar>
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleProfile}>Profile</MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            </Menu>
+              ) : (
+                <>
+                  <Button
+                    component={RouterLink}
+                    to="/inquiry-dashboard"
+                    color="inherit"
+                    sx={{
+                      fontWeight: isActive('/inquiry-dashboard') ? 600 : 400,
+                      '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
+                    }}
+                  >
+                    Inquiry Dashboard
+                  </Button>
+                  <Button
+                    component={RouterLink}
+                    to="/case-detail-dashboard"
+                    color="inherit"
+                    sx={{
+                      fontWeight: isActive('/case-detail-dashboard') ? 600 : 400,
+                      '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
+                    }}
+                  >
+                    Case Dashboard
+                  </Button>
+                </>
+              )}
+              <IconButton
+                onClick={handleMenu}
+                size="small"
+                sx={{ ml: 2 }}
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+              >
+                <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}>
+                  {user.userName?.charAt(0).toUpperCase()}
+                </Avatar>
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+            </Box>
           </>
         ) : (
-          <Button 
-            variant="contained" 
-            onClick={() => navigate('/login')}
-            sx={{ 
-              bgcolor: '#000',
-              color: '#fff',
-              '&:hover': {
-                bgcolor: '#333'
-              }
-            }}
-          >
-            Login
-          </Button>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Button
+              component={RouterLink}
+              to="/service"
+              color="inherit"
+              sx={{
+                fontWeight: isActive('/service') ? 600 : 400,
+                '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
+              }}
+            >
+              Service
+            </Button>
+            <Button
+              component={RouterLink}
+              to="/about"
+              color="inherit"
+              sx={{
+                fontWeight: isActive('/about') ? 600 : 400,
+                '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.04)' }
+              }}
+            >
+              About Me
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => navigate('/login')}
+              sx={{
+                bgcolor: '#000',
+                color: '#fff',
+                '&:hover': {
+                  bgcolor: '#333'
+                }
+              }}
+            >
+              Login
+            </Button>
+          </Box>
         )}
       </Toolbar>
     </AppBar>

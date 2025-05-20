@@ -71,8 +71,12 @@ const InfoCollChildrenInfo = forwardRef(({ clientCaseId }: { clientCaseId: numbe
     getFormData: () => children,
     submit: async (clientCase: any) => {
       try {
-        console.log('child.dob', children[0].dob);
-        await infoCollApi.submitChildrenInfo(children);
+        // 为每个 child 加上 clientCaseId
+        const childrenWithCaseId = children.map(child => ({
+          ...child,
+          clientCaseId: clientCase?.clientCaseId || clientCaseId
+        }));
+        await infoCollApi.submitChildrenInfo(childrenWithCaseId);
         setSnackbar({ open: true, message: '保存成功', severity: 'success' });
       } catch (e: any) {
         setSnackbar({ open: true, message: e?.message || '保存失败', severity: 'error' });

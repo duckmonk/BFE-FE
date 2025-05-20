@@ -46,7 +46,7 @@ const trackStringChanges = () => {
     user: string;
   }
 
-const ColorfulTextArea = ({ value, onChange, userType }: { value: string; onChange: (value: string) => void; userType: string }) => {
+const ColorfulTextArea = ({ value, onChange, userType, readOnly }: { value: string; onChange: (value: string) => void; userType: string; readOnly?: boolean }) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [segments, setSegments] = useState<TextSegment[]>([]);
     const tracker = useRef(trackStringChanges()).current;
@@ -131,6 +131,7 @@ const ColorfulTextArea = ({ value, onChange, userType }: { value: string; onChan
           ref={textareaRef}
           value={segments.map(s => s.text).join('')}
           onInput={handleInput}
+          readOnly={readOnly}
           style={{
             width: '100%',
             minHeight: '150px',

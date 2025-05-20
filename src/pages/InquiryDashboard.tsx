@@ -141,18 +141,18 @@ export default function InquiryDashboard() {
   };
 
   return (
-    <Box sx={{ maxWidth: 1200, mx: 'auto', bgcolor: '#fff', borderRadius: 2, boxShadow: 1, p: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h5" fontWeight="bold">Marketing Inquiry Dashboard</Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography>Welcome, User</Typography>
-          <IconButton><AccountCircleIcon /></IconButton>
+      <Box sx={{ maxWidth: 1200, mx: 'auto', bgcolor: '#fff', borderRadius: 2, boxShadow: 1, p: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h5" fontWeight="bold">Marketing Inquiry Dashboard</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography>Welcome, User</Typography>
+            <IconButton><AccountCircleIcon /></IconButton>
+          </Box>
         </Box>
-      </Box>
 
-      {/* 筛选区 */}
-      <Grid container spacing={2} mb={2}>
-        <Grid size={{ xs: 12, md: 3 }}>
+        {/* 筛选区 */}
+        <Grid container spacing={2} mb={2}>
+          <Grid size={{ xs: 12, md: 3 }}>
           <Box sx={{ display: 'flex', gap: 1 }}>
             <TextField 
               fullWidth 
@@ -188,30 +188,30 @@ export default function InquiryDashboard() {
               Apply
             </Button>
           </Box>
+          </Grid>
         </Grid>
-      </Grid>
 
-      {/* 数据表格 */}
-      <TableContainer component={Paper} variant="outlined">
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Inquiry Timestamp</TableCell>
+        {/* 数据表格 */}
+        <TableContainer component={Paper} variant="outlined">
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Inquiry Timestamp</TableCell>
               <TableCell>Case Detail</TableCell>
-              <TableCell>Petitioner Email</TableCell>
-              <TableCell>Petitioner Name</TableCell>
-              <TableCell>Petitioner Field</TableCell>
-              <TableCell>Work Benefits</TableCell>
-              <TableCell>US Gov Projects</TableCell>
-              <TableCell>High Impact Projects</TableCell>
-              <TableCell>Key Role Verification</TableCell>
-              <TableCell>Applied Innovations</TableCell>
-              <TableCell>Achievements</TableCell>
-              <TableCell>Social Platform</TableCell>
-              <TableCell>Social Handle</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+                <TableCell>Petitioner Email</TableCell>
+                <TableCell>Petitioner Name</TableCell>
+                <TableCell>Petitioner Field</TableCell>
+                <TableCell>Work Benefits</TableCell>
+                <TableCell>US Gov Projects</TableCell>
+                <TableCell>High Impact Projects</TableCell>
+                <TableCell>Key Role Verification</TableCell>
+                <TableCell>Applied Innovations</TableCell>
+                <TableCell>Achievements</TableCell>
+                <TableCell>Social Platform</TableCell>
+                <TableCell>Social Handle</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
             {loading ? (
               <TableRow>
                 <TableCell colSpan={13} align="center">Loading...</TableCell>
@@ -251,9 +251,9 @@ export default function InquiryDashboard() {
                 </TableRow>
               ))
             )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableBody>
+          </Table>
+        </TableContainer>
 
       {/* 创建用户确认对话框 */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
@@ -296,6 +296,6 @@ export default function InquiryDashboard() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+      </Box>
   );
 } 

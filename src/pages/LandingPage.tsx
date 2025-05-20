@@ -53,13 +53,13 @@ const LandingPage: React.FC = () => {
 
   const handleTask1Click = () => {
     if (isTaskEnabled('Task 1: Endeavor')) {
-      setOpenTask1Dialog(true);
+    setOpenTask1Dialog(true);
     }
   };
 
   const handleTask2Click = () => {
     if (isTaskEnabled('Task 2: National Importance')) {
-      setOpenTask2Dialog(true);
+    setOpenTask2Dialog(true);
     }
   };
 

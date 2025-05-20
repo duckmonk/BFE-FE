@@ -1,15 +1,19 @@
 import React, { useState, useImperativeHandle, forwardRef, useEffect } from 'react';
 import { Box, Typography, TextField, FormControlLabel, Checkbox, Snackbar, Alert, Button, IconButton, Tooltip } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { infoCollApi } from '../../services/api';
+import { infoCollApi, taskApi } from '../../services/api';
+import { getUserType } from '../../utils/user';
 
 const TaskEndeavorSubmission = forwardRef(({ clientCaseId }: { clientCaseId: number }, ref) => {
   const [formData, setFormData] = useState<{ [key: string]: any }>({});
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
+  const userType = getUserType();
+
+  const isApproved = userType === 'client' && formData.endeavorConfirm === 'YES';
 
   useEffect(() => {
     if (clientCaseId) {
-      infoCollApi.getEndeavorSubmission(clientCaseId).then(res => {
+      taskApi.getEndeavorSubmission(clientCaseId).then(res => {
         if (res && res.data) {
           setFormData(res.data);
         }
@@ -40,7 +44,7 @@ const TaskEndeavorSubmission = forwardRef(({ clientCaseId }: { clientCaseId: num
   const handleSync = async () => {
     try {
       const data = { ...formData, clientCaseId };
-      await infoCollApi.submitEndeavorSubmission(data);
+      await taskApi.submitEndeavorSubmission(data);
       setSnackbar({ open: true, message: '同步成功', severity: 'success' });
     } catch (e: any) {
       setSnackbar({ open: true, message: e?.message || '同步失败', severity: 'error' });
@@ -55,13 +59,35 @@ const TaskEndeavorSubmission = forwardRef(({ clientCaseId }: { clientCaseId: num
     }
   };
 
+  // client端提交反馈
+  const handleSubmitFeedback = async () => {
+    try {
+      const data = { ...formData, clientCaseId, endeavorConfirm: 'NO' };
+      await taskApi.submitEndeavorSubmission(data);
+      setSnackbar({ open: true, message: '反馈已提交', severity: 'success' });
+    } catch (e: any) {
+      setSnackbar({ open: true, message: e?.message || '提交失败', severity: 'error' });
+    }
+  };
+
+  // client端approve
+  const handleApprove = async () => {
+    try {
+      const data = { ...formData, clientCaseId, endeavorConfirm: 'YES' };
+      await taskApi.submitEndeavorSubmission(data);
+      setSnackbar({ open: true, message: '已确认', severity: 'success' });
+    } catch (e: any) {
+      setSnackbar({ open: true, message: e?.message || '提交失败', severity: 'error' });
+    }
+  };
+
   // 暴露方法给父组件
   useImperativeHandle(ref, () => ({
     getFormData: () => formData,
     submit: async (clientCase: any) => {
       try {
         const data = { ...formData, clientCaseId: clientCase.clientCaseId };
-        await infoCollApi.submitEndeavorSubmission(data);
+        await taskApi.submitEndeavorSubmission(data);
         setSnackbar({ open: true, message: '保存成功', severity: 'success' });
       } catch (e: any) {
         setSnackbar({ open: true, message: e?.message || '保存失败', severity: 'error' });
@@ -85,15 +111,18 @@ const TaskEndeavorSubmission = forwardRef(({ clientCaseId }: { clientCaseId: num
         value={formData.endeavorDraft || ''}
         required
         onChange={handleChange}
+        InputProps={{ readOnly: isApproved || userType === 'client' }}
       />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleSync}
-        sx={{ mb: 3 }}
-      >
-        Sync with Client
-      </Button>
+      {userType !== 'client' && (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSync}
+          sx={{ mb: 3 }}
+        >
+          Sync with Client
+        </Button>
+      )}
 
       {/* Client Feedback */}
       <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1 }}>Client Feedback</Typography>
@@ -106,15 +135,18 @@ const TaskEndeavorSubmission = forwardRef(({ clientCaseId }: { clientCaseId: num
         sx={{ mb: 2 }}
         value={formData.endeavorFeedback || ''}
         onChange={handleChange}
+        InputProps={{ readOnly: isApproved }}
       />
-      <Button
-        variant="outlined"
-        startIcon={<ContentCopyIcon />}
-        onClick={handleCopy}
-        sx={{ mb: 3 }}
-      >
-        Copy Feedback
-      </Button>
+      {userType === 'client' && !isApproved && (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSubmitFeedback}
+          sx={{ mb: 3 }}
+        >
+          提交反馈
+        </Button>
+      )}
 
       {/* Client Confirmation */}
       <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1 }}>Client Confirmation</Typography>
@@ -125,6 +157,7 @@ const TaskEndeavorSubmission = forwardRef(({ clientCaseId }: { clientCaseId: num
             checked={formData.endeavorConfirm === 'YES'}
             onChange={handleCheckboxChange}
             required
+            disabled={isApproved}
           />
         }
         label="I approve this final version"
@@ -151,6 +184,18 @@ const TaskEndeavorSubmission = forwardRef(({ clientCaseId }: { clientCaseId: num
             required
           />
         </>
+      )}
+      {/* client端勾选后出现Approve按钮 */}
+      {userType === 'client' && (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleApprove}
+          sx={{ mb: 3, mt: 4 }}
+          disabled={isApproved}
+        >
+          {isApproved ? '已确认' : 'Approve'}
+        </Button>
       )}
 
       <Snackbar

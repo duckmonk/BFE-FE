@@ -32,15 +32,14 @@ const Login: React.FC = () => {
       console.log('response', response);
       if (response.data.status === 'success') {
         console.log('response.data', response.data);
-        // 保存用户信息
-        saveUserInfo(response.data);
+        // 保存用户信息，确保包含userEmail
+        saveUserInfo({
+          userId: response.data.userId,
+          userName: response.data.userName,
+          userType: response.data.userType,
+          userEmail: formData.email // 使用登录时输入的邮箱
+        });
 
-        // setSnackbar({
-        //   open: true,
-        //   message: `登录成功！${response.data.userType} ${response.data.userName} ${response.data.userId}`,
-        //   severity: 'success'
-        // });
-        console.log('navigate');
         setTimeout(() => {
           navigate('/');
           window.location.reload(); // 让Header刷新

@@ -1,6 +1,6 @@
 import React, { useState, useImperativeHandle, forwardRef, useEffect } from 'react';
 import { Box, Typography, TextField, Button, Snackbar, Alert, MenuItem } from '@mui/material';
-import { infoCollApi } from '../../services/api';
+import { infoCollApi, taskApi } from '../../services/api';
 import { getUserType } from '../../utils/user';
 import ColorfulTextArea from '../../components/ColorfulTextArea';
 
@@ -39,7 +39,7 @@ const TaskFuturePlan = forwardRef(({ clientCaseId }: { clientCaseId: number }, r
 
   useEffect(() => {
     if (clientCaseId) {
-      infoCollApi.getFuturePlan(clientCaseId).then(res => {
+      taskApi.getFuturePlan(clientCaseId).then(res => {
         if (res && res.data) {
           setFormData(res.data);
         }
@@ -72,8 +72,13 @@ const TaskFuturePlan = forwardRef(({ clientCaseId }: { clientCaseId: number }, r
 
   const handleSubmitDraft = async () => {
     try {
-      const data = { ...formData, futureplanSubmitDraft: 'YES' };
-      await infoCollApi.submitFuturePlan(data);
+      const data = { 
+        ...formData, 
+        futureplanSubmitDraft: 'YES',
+        clientCaseId,
+        id: formData.id
+      };
+      await taskApi.submitFuturePlan(data);
       setFormData(prev => ({ ...prev, futureplanSubmitDraft: 'YES' }));
       setSnackbar({ open: true, message: '提交成功', severity: 'success' });
     } catch (e: any) {
@@ -83,8 +88,13 @@ const TaskFuturePlan = forwardRef(({ clientCaseId }: { clientCaseId: number }, r
 
   const handleConfirm = async () => {
     try {
-      const data = { ...formData, futureplanConfirm: 'YES' };
-      await infoCollApi.submitFuturePlan(data);
+      const data = { 
+        ...formData, 
+        futureplanConfirm: 'YES',
+        clientCaseId,
+        id: formData.id
+      };
+      await taskApi.submitFuturePlan(data);
       setFormData(prev => ({ ...prev, futureplanConfirm: 'YES' }));
       setSnackbar({ open: true, message: '确认成功', severity: 'success' });
     } catch (e: any) {
@@ -107,7 +117,7 @@ const TaskFuturePlan = forwardRef(({ clientCaseId }: { clientCaseId: number }, r
     submit: async (clientCase: any) => {
       try {
         const data = { ...formData, clientCaseId: clientCase.clientCaseId };
-        await infoCollApi.submitFuturePlan(data);
+        await taskApi.submitFuturePlan(data);
         setSnackbar({ open: true, message: '保存成功', severity: 'success' });
       } catch (e: any) {
         setSnackbar({ open: true, message: e?.message || '保存失败', severity: 'error' });
@@ -179,7 +189,7 @@ const TaskFuturePlan = forwardRef(({ clientCaseId }: { clientCaseId: number }, r
       </TextField>
 
       {/* Referee Support Notes */}
-      {formData.futureplanReferees.map((refereeName) => (
+      {(formData.futureplanReferees || []).map((refereeName) => (
         <Box key={refereeName} sx={{ mb: 2 }}>
           <Typography variant="subtitle2" sx={{ mb: 1 }}>Support Note for {refereeName}</Typography>
           <TextField

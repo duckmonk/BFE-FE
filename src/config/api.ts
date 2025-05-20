@@ -6,6 +6,7 @@ export const API_PATHS = {
   CONTACT: `/contact-me`,
   INQUIRY: `/inquiry`,
   INFO_COLL: `/info-coll`,
+  CLIENT_CASE: `/client-case`,
   TASK: `/task`,
   // 其他API路径可以在这里添加
   // AUTH: `${BASE_URL}/auth`,
